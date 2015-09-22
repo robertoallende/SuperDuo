@@ -48,8 +48,8 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
                 null  // sort order
         );
 
-
         bookListAdapter = new BookListAdapter(getActivity(), cursor, 0);
+
         View rootView = inflater.inflate(R.layout.fragment_list_of_books, container, false);
         searchText = (EditText) rootView.findViewById(R.id.searchText);
         rootView.findViewById(R.id.searchButton).setOnClickListener(
@@ -70,12 +70,11 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Cursor cursor = bookListAdapter.getCursor();
                 if (cursor != null && cursor.moveToPosition(position)) {
-                    ((Callback)getActivity())
+                    ((Callback) getActivity())
                             .onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
                 }
             }
         });
-
         return rootView;
     }
 
@@ -128,5 +127,11 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         activity.setTitle(R.string.books);
+    }
+
+    public void onStop() {
+        super.onStop();
+        Cursor cursor = bookListAdapter.getCursor();
+        cursor.close();
     }
 }

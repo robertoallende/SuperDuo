@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -71,13 +73,23 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             public void afterTextChanged(Editable s) {
                 String ean =s.toString();
                 //catch isbn10 numbers
-                if(ean.length()==10 && !ean.startsWith("978")){
-                    ean="978"+ean;
-                }
-                if(ean.length()<13){
+                // if(ean.length()==10 && !ean.startsWith("978")){
+                //     ean="978"+ean;
+                // }
+                if(ean.length() != 13 && ean.length() != 10){
                     clearFields();
                     return;
                 }
+
+                if (! isConnected()) {
+                    Context context = getActivity();
+                    int duration = Toast.LENGTH_SHORT;
+                    String msg = (String) getResources().getText(R.string.no_internet);
+                    Toast toast = Toast.makeText(context, msg, duration);
+                    toast.show();
+                    return;
+                }
+
                 //Once we have an ISBN, start a book intent
                 Intent bookIntent = new Intent(getActivity(), BookService.class);
                 bookIntent.putExtra(BookService.EAN, ean);
@@ -96,13 +108,14 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 // Hint: Use a Try/Catch block to handle the Intent dispatch gracefully, if you
                 // are using an external app.
                 //when you're done, remove the toast below.
-                Context context = getActivity();
-                CharSequence text = "This button should let you scan a book for its barcode!";
-                int duration = Toast.LENGTH_SHORT;
+                // Context context = getActivity();
+                // CharSequence text = "This button should let you scan a book for its barcode!";
+                // int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-
+                // Toast toast = Toast.makeText(context, text, duration);
+                // toast.show();
+                Intent intent = new Intent(getActivity(), SimpleScannerActivity.class);
+                getActivity().startActivityForResult(intent, SimpleScannerActivity.SCAN);
             }
         });
 
@@ -142,9 +155,9 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             return null;
         }
         String eanStr= ean.getText().toString();
-        if(eanStr.length()==10 && !eanStr.startsWith("978")){
-            eanStr="978"+eanStr;
-        }
+        // if(eanStr.length()==10 && !eanStr.startsWith("978")){
+        //    eanStr="978"+eanStr;
+        //}
         return new CursorLoader(
                 getActivity(),
                 AlexandriaContract.BookEntry.buildFullBookUri(Long.parseLong(eanStr)),
@@ -203,5 +216,16 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         activity.setTitle(R.string.scan);
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
     }
 }

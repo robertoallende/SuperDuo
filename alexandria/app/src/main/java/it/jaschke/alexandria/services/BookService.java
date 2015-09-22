@@ -72,7 +72,7 @@ public class BookService extends IntentService {
      */
     private void fetchBook(String ean) {
 
-        if(ean.length()!=13){
+        if(ean.length()!=13 && ean.length()!=10){
             return;
         }
 
@@ -83,6 +83,8 @@ public class BookService extends IntentService {
                 null, // values for "where" clause
                 null  // sort order
         );
+
+        if (bookEntry == null) return;
 
         if(bookEntry.getCount()>0){
             bookEntry.close();
@@ -155,6 +157,8 @@ public class BookService extends IntentService {
         final String CATEGORIES = "categories";
         final String IMG_URL_PATH = "imageLinks";
         final String IMG_URL = "thumbnail";
+
+        if (bookJsonString == null) return;
 
         try {
             JSONObject bookJson = new JSONObject(bookJsonString);

@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import it.jaschke.alexandria.api.Callback;
@@ -178,5 +179,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         super.onBackPressed();
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Integer aa = requestCode;
+        if (requestCode == SimpleScannerActivity.SCAN) {
+            if (resultCode == RESULT_OK) {
+                String isbn = (String) data.getExtras().get(SimpleScannerActivity.ISBN);
+                EditText ean = (EditText) findViewById(R.id.ean);
+                if (isbn != null && ean != null) ean.setText(isbn);
+            }
+        }
+    }
 }
