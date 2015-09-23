@@ -30,6 +30,8 @@ public class PagerFragment extends Fragment
         View rootView = inflater.inflate(R.layout.pager_fragment, container, false);
         mPagerHandler = (ViewPager) rootView.findViewById(R.id.pager);
         mPagerAdapter = new myPageAdapter(getChildFragmentManager());
+
+
         for (int i = 0;i < NUM_PAGES;i++)
         {
             Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
@@ -37,6 +39,19 @@ public class PagerFragment extends Fragment
             viewFragments[i] = new MainScreenFragment();
             viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
         }
+
+        boolean isRightToLeft = getResources().getBoolean(R.bool.is_right_to_left);
+        if (isRightToLeft) {
+            // http://stackoverflow.com/questions/2137755/how-do-i-reverse-an-int-array-in-java
+            for(int i = 0; i < NUM_PAGES / 2; i++)
+            {
+                MainScreenFragment temp = viewFragments[i];
+                viewFragments[i] = viewFragments[NUM_PAGES - i - 1];
+                viewFragments[NUM_PAGES - i - 1] = temp;
+            }
+        }
+
+
         mPagerHandler.setAdapter(mPagerAdapter);
         mPagerHandler.setCurrentItem(MainActivity.current_fragment);
         return rootView;
@@ -63,7 +78,10 @@ public class PagerFragment extends Fragment
         @Override
         public CharSequence getPageTitle(int position)
         {
-            return getDayName(getActivity(),System.currentTimeMillis()+((position-2)*86400000));
+            int pos = position;
+            boolean isRightToLeft = getResources().getBoolean(R.bool.is_right_to_left);
+            if (isRightToLeft) pos = NUM_PAGES - position - 1;
+            return getDayName(getActivity(),System.currentTimeMillis()+((pos-2)*86400000));
         }
         public String getDayName(Context context, long dateInMillis) {
             // If the date is today, return the localized version of "Today" instead of the actual
