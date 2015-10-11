@@ -90,7 +90,10 @@ public class myFetchService extends IntentService
         }
         catch (Exception e)
         {
-            Log.e(LOG_TAG,"Exception here" + e.getMessage());
+            Log.e(LOG_TAG,"Exception here: " + e.getMessage());
+            // Log.e(LOG_TAG,"Using dummy data.");
+            // processJSONdata(getString(R.string.dummy_data), getApplicationContext(), false);
+            // return;
         }
         finally {
             if(m_connection != null)
@@ -138,15 +141,17 @@ public class myFetchService extends IntentService
         // be updated. Feel free to use the codes
         final String BUNDESLIGA1 = "394";
         final String BUNDESLIGA2 = "395";
-        final String LIGUE1 = "396";
-        final String LIGUE2 = "397";
         final String PREMIER_LEAGUE = "398";
         final String PRIMERA_DIVISION = "399";
-        final String SEGUNDA_DIVISION = "400";
         final String SERIE_A = "401";
+        final String LIGUE1 = "396";
+        final String LIGUE2 = "397";
+        final String SEGUNDA_DIVISION = "400";
         final String PRIMERA_LIGA = "402";
         final String Bundesliga3 = "403";
         final String EREDIVISIE = "404";
+
+
 
 
         final String SEASON_LINK = "http://api.football-data.org/alpha/soccerseasons/";
@@ -196,7 +201,13 @@ public class myFetchService extends IntentService
                         League.equals(SERIE_A)             ||
                         League.equals(BUNDESLIGA1)         ||
                         League.equals(BUNDESLIGA2)         ||
-                        League.equals(PRIMERA_DIVISION)     )
+                        League.equals(PRIMERA_DIVISION)    ||
+                        League.equals(LIGUE1)              ||
+                        League.equals(LIGUE2)              ||
+                        League.equals(SEGUNDA_DIVISION)    ||
+                        League.equals(PRIMERA_LIGA)        ||
+                        League.equals(Bundesliga3)         ||
+                        League.equals(EREDIVISIE)   )
                 {
                     match_id = match_data.getJSONObject(LINKS).getJSONObject(SELF).
                             getString("href");

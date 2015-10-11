@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/widget"
+    android:gravity="start|center">
+
+    <TextView
+        android:id="@+id/today_title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="2dip" />
+
+    <TextView
+        tools:text="Barcelona vs Real Madrid"
+        android:id="@+id/featured_match"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="2dip"
+        android:textSize="@dimen/TeamNames"/>
+
+    <TextView
+        android:id="@+id/more_app"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_margin="2dip"
+        android:textSize="@dimen/seeMore" />
+
+</LinearLayout>
