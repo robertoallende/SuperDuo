@@ -49,8 +49,8 @@ public class AppWidget extends AppWidgetProvider {
                 views.setTextViewText(R.id.more_app, moreOn);
 
                 views.setTextViewText(R.id.featured_match, mainText);
-                mgr.updateAppWidget(appWidgetId, views);
             }
+            mgr.updateAppWidget(appWidgetId, views);
         }
 
 
@@ -69,7 +69,7 @@ public class AppWidget extends AppWidgetProvider {
                 null,
                 new String[]{todayDate},
                 null);
-        //new String[]{todayDate}
+
         try {
             if (cursor == null) {
                 return result;
